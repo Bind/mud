@@ -61,10 +61,17 @@ export async function createPhaserEngine<S extends ScenesConfig>(options: Phaser
           loader.spritesheet(assetKey, asset.path, asset.options);
         } else if (asset.type === AssetType.MultiAtlas) {
           loader.multiatlas(assetKey, asset.path, asset.options.imagePath);
+        } else if (asset.type === AssetType.Aseprite) {
+          loader.aseprite(assetKey, asset.options.imagePath, asset.path);
         }
       });
-    }
 
+      // After asset is loaded, create animations from it
+      // Should we put this in the loader?
+      if (asset.type === AssetType.Aseprite) {
+        phaserScene.anims.createFromAseprite(assetKey);
+      }
+    }
     // Setup object pool
     const objectPool = createObjectPool(phaserScene);
 
@@ -95,7 +102,7 @@ export async function createPhaserEngine<S extends ScenesConfig>(options: Phaser
       if (!tileset) {
         console.error(`Adding tileset ${tilesetKey} failed.`);
         continue;
-      };
+      }
       partialTilesets[tilesetKey] = tileset;
     }
     const tilesets = partialTilesets as Tilesets<keyof S[typeof key]["tilesets"]>;

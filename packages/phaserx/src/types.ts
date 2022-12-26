@@ -195,6 +195,14 @@ export type Asset =
       options: {
         imagePath: string;
       };
+    }
+  | {
+      type: AssetType.Aseprite;
+      key: string;
+      path: string;
+      options: {
+        imagePath: string;
+      };
     };
 
 export type CameraConfig = {
